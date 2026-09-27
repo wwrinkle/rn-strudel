@@ -1,3 +1,4 @@
+/// <reference path="../strudel.d.ts" />
 // s("crackle") without regenerating its noise buffer on every note (option 'crackleCache').
 //
 // superdough caches the white/pink/brown noise buffers but deliberately regenerates crackle's for every note

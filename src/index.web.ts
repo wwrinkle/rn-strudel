@@ -1,3 +1,4 @@
+/// <reference path="./strudel.d.ts" />
 // Web build of rn-strudel: the browser already has everything Strudel needs, so this is only the same initStrudel()
 // API on top of stock @strudel/webaudio + superdough (call it from a user gesture, e.g. a click handler). It lets app
 // code shared between web and native stay free of platform checks.

@@ -1,3 +1,4 @@
+/// <reference path="./strudel.d.ts" />
 // initStrudel(): one call that brings up Strudel on React Native (import 'rn-strudel/environment' first).
 //
 // Does, in order: creates (or takes) an AudioContext and makes it browser-like (rn-web-audio-compat), registers
