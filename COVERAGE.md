@@ -71,6 +71,6 @@ What of Strudel/superdough works on React Native with rn-strudel, how, and where
 
 ## Beyond the patterns
 
-- Screen lock: `initStrudel()` drives Strudel's scheduler from an audio-thread clock and shows the Android playback notification, so patterns keep playing in time with the screen locked (verified on a Pixel 10; on an iPhone, patterns played through lock before the audio clock was added, and this version has not been run there yet).
+- Screen lock: `initStrudel()` drives Strudel's scheduler from an audio-thread clock and shows the Android playback notification, so patterns keep playing in time with the screen locked (verified on a Pixel 10 and an iPhone 13).
 - `engine.evaluate(code)`: run pattern code from text (the Function() form of eval, which Hermes supports).
 - Options (`setStrudelOptions`): `fdnReverb`, `reverbIrCache`, `crackleCache`, all on by default.

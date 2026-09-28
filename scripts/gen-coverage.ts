@@ -43,7 +43,7 @@ lines.push(
 lines.push('');
 lines.push('## Beyond the patterns');
 lines.push('');
-lines.push("- Screen lock: `initStrudel()` drives Strudel's scheduler from an audio-thread clock and shows the Android playback notification, so patterns keep playing in time with the screen locked (verified on a Pixel 10; on an iPhone, patterns played through lock before the audio clock was added, and this version has not been run there yet).");
+lines.push("- Screen lock: `initStrudel()` drives Strudel's scheduler from an audio-thread clock and shows the Android playback notification, so patterns keep playing in time with the screen locked (verified on a Pixel 10 and an iPhone 13).");
 lines.push('- `engine.evaluate(code)`: run pattern code from text (the Function() form of eval, which Hermes supports).');
 lines.push('- Options (`setStrudelOptions`): `fdnReverb`, `reverbIrCache`, `crackleCache`, all on by default.');
 lines.push('');
