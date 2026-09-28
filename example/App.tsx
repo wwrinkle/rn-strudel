@@ -107,10 +107,15 @@ export default function App() {
     console.log(`[STRUDEL] done: ${summarizeStrudel(all, ROWS)}`);
   }, [env, record, stopPlaying]);
 
-  // Built with EXPO_PUBLIC_AUTORUN=1: run everything silently on launch (automated checks; results go to the log).
+  // Built with EXPO_PUBLIC_AUTORUN=1: run everything silently, once per launch (automated checks; results go to the
+  // log). Once only: runAll changes identity whenever `playing` does, which would otherwise start overlapping runs.
+  const autoran = useRef(false);
   useEffect(() => {
-    if (!AUTORUN) return;
-    const id = setTimeout(() => void runAll(), 2000);
+    if (!AUTORUN || autoran.current) return;
+    const id = setTimeout(() => {
+      autoran.current = true;
+      void runAll();
+    }, 2000);
     return () => clearTimeout(id);
   }, [runAll]);
 
