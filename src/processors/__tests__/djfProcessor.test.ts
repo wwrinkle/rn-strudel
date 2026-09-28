@@ -40,7 +40,7 @@ describe('djfProcessor parity with superdough DJFProcessor', () => {
     { value: 0.0 }, // lopass, fully closed
   ])('matches upstream across consecutive blocks: %o', ({ value }) => {
     // A real Web Audio AudioParam is always float32; our shim's params come
-    // from a Reanimated SharedValue (float64) — quantize through Math.fround
+    // from a float64 JS number — quantize through Math.fround
     // on both sides so the comparison isolates the DSP math itself, not that
     // separate, already-documented precision gap (see ladderProcessor.test.ts).
     const value32 = Math.fround(value);

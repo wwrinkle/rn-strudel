@@ -2,14 +2,11 @@
 // superdough itself credits this processor's bitcrush math to dktr0's
 // WebDirt (GPLv3): https://github.com/dktr0/WebDirt/blob/5ce3d698362c54d6e1b68acc47eb2955ac62c793/dist/AudioWorklets.js
 // Superdough source: https://codeberg.org/uzu/strudel (AGPL-3.0-or-later),
-// packages/superdough/worklets.mjs, class CrushProcessor. Registered in webAudioShim.ts
-// under the same processor name superdough uses: 'crush-processor'
+// packages/superdough/worklets.mjs, class CrushProcessor. Registered (register.ts)
+// under superdough's name, 'crush-processor'
 // (superdough.mjs: `getWorklet(ac, 'crush-processor', { crush: fx.crush })`).
 //
-// `process` is marked 'worklet' at its definition site (not just the call
-// site) — the standard Reanimated/worklets pattern for a function meant to
-// run on a worklet runtime when it's defined in a different module than
-// where it's installed. Confirmed working on-device (see webAudioShim.ts).
+// `process` is marked 'worklet' at its definition site, as every processor's must be (rn-web-audio-compat's docs/FINDINGS.md, "Worklet rules").
 
 import type { WorkletProcessorModule } from 'rn-web-audio-compat';
 

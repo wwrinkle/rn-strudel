@@ -1,5 +1,5 @@
 // Real-time port of superdough's CoarseProcessor (worklets.mjs) — sample
-// rate reduction (sample-and-hold). Registered in webAudioShim.ts as
+// rate reduction (sample-and-hold). Registered (register.ts) as
 // 'coarse-processor'. GPLv3-family attribution same as crushProcessor.ts
 // (dktr0's WebDirt) — see that file.
 //

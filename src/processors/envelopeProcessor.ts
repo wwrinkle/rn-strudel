@@ -1,6 +1,6 @@
 // Real-time port of superdough's EnvelopeProcessor (worklets.mjs) — an ADSR
 // control-signal generator (mono, no audio input), source-style. Registered
-// in webAudioShim.ts as 'envelope-processor'.
+// in register.ts as 'envelope-processor'.
 //
 // `_warp`/`_advance` were instance methods referencing `this.val`/
 // `this.beginTime` in the original; ported here as nested functions closing

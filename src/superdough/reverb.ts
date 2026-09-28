@@ -14,11 +14,14 @@
 //    length (MAX_IR_SECONDS); the requested duration is still recorded on
 //    the node so superdough's "did the params change?" check doesn't
 //    regenerate the IR every hap.
-// 3. Level. The convolver's output is much quieter than a browser's for the
-//    same settings, so the wet path gets a fixed makeup gain (WET_GAIN).
+// 3. Level. The wet path has a fixed makeup gain (WET_GAIN, +8 dB), set by ear
+//    when the capped reverb sounded weak. Measured later: react-native-audio-api's
+//    convolver normalizes like the spec, so with WET_GAIN this reverb is about
+//    3.5 dB (default roomsize, capped) to 8.7 dB louder than a browser's. The
+//    FDN reverb (the default) is calibrated to the browser level instead.
 //
 // (The other half of "no reverb at all" was OfflineAudioContext never
-// firing `oncomplete`; see rnGlobalPolyfills.ts.)
+// firing `oncomplete`; see rn-web-audio-compat's globals.ts.)
 //
 // Not covered: regenerating the IR on a live node (a later `buffer` set while
 // the node is being rendered) still races inside the library (upstream PR

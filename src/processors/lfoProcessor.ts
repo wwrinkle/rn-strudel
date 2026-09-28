@@ -1,6 +1,5 @@
 // Real-time port of superdough's LFOProcessor (worklets.mjs) — a
-// modulation-signal generator (no audio input), source-style. Registered in
-// webAudioShim.ts as 'lfo-processor'.
+// modulation-signal generator (no audio input), source-style. Registered (register.ts) as 'lfo-processor'.
 //
 // begin/end gate on the AudioWorkletGlobalScope's `currentTime` global in
 // the original; that's now passed explicitly into `process` (see

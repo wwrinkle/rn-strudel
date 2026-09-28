@@ -1,6 +1,6 @@
 // Real-time port of superdough's TransientProcessor (worklets.mjs) — an
 // attack/sustain transient shaper (envelope-follower based), effect-style.
-// Registered in webAudioShim.ts as 'transient-processor'.
+// Registered (register.ts) as 'transient-processor'.
 //
 // Unlike every other processor here, the original has NO live AudioParams
 // at all (`parameterDescriptors` is `[]`) — every setting comes from

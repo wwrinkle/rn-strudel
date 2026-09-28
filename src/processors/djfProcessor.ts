@@ -1,25 +1,10 @@
-// Real-time port of superdough's DJFProcessor (worklets.mjs) — a single-knob
-// "DJ filter" (mixer-style crossfade filter): center = bypass, one direction
-// sweeps toward low-pass (thins down to just the bassline), the other toward
-// high-pass (strips the bass, leaves a thin/tinny sound). Registered in
-// webAudioShim.ts under the same processor name superdough uses:
-// 'djf-processor'.
+// Real-time port of superdough's DJFProcessor (worklets.mjs): a single-knob "DJ filter". The centre is bypass; one
+// direction sweeps toward a lowpass, the other toward a highpass. Superdough source: https://codeberg.org/uzu/strudel
+// (AGPL-3.0-or-later). Registered (register.ts) under superdough's name, 'djf-processor'.
 //
-// State (one running two-pole filter per channel) is created once per
-// constructed node via createState() — matches the original's constructor(),
-// and the same "grow the state array lazily as channels appear" pattern
-// ladderProcessor.ts already uses, since channel count isn't known until the
-// first process call.
-//
-// `process` is fully self-contained — the original's sibling top-level
-// `TwoPoleFilter` class and `clamp`/`blockSize`/`PI`/`INVSR` module-level
-// consts are all inlined into process()'s own body, matching the established
-// rule (see CLAUDE.md's worklet-crash section): a reference from inside
-// process() to a sibling top-level binding in the same module doesn't cross
-// the worklet runtime boundary safely, only true globals (Math.*) and
-// values captured from an *enclosing* scope do. Uses framesToProcess rather
-// than the original's hardcoded blockSize=128, since react-native-audio-api
-// doesn't guarantee that exact block size.
+// State (one two-pole filter per channel) is created per node by createState() and grows as channels appear. The
+// original's TwoPoleFilter class and module-level constants are inlined into `process`, which must be self-contained
+// (rn-web-audio-compat's docs/FINDINGS.md, "Worklet rules"). Uses framesToProcess instead of the original's fixed 128.
 
 import type { WorkletProcessorModule } from 'rn-web-audio-compat';
 

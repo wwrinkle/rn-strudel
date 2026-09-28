@@ -34,7 +34,7 @@ describe('distortProcessor parity with superdough DistortProcessor', () => {
   test.each(ALGORITHMS)('matches upstream for algorithm=%s', (algorithm) => {
     const blockSize = 128;
     const input = makeSignal(blockSize);
-    // A real Web Audio AudioParam is float32; ours is a float64 SharedValue
+    // A real Web Audio AudioParam is float32; ours is a float64 JS number
     // — quantize test inputs through Math.fround for both sides so the
     // comparison isolates the DSP math (see ladderProcessor.test.ts).
     const distort = Math.fround(2);

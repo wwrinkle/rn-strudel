@@ -15,8 +15,11 @@ import {
   stopBackgroundPlayback,
   type AudioClock,
 } from 'rn-web-audio-compat';
-import { repl } from '@strudel/core';
+import * as strudelCore from '@strudel/core';
+import { evalScope, evaluate as strudelEvaluate, repl } from '@strudel/core';
+import * as strudelMini from '@strudel/mini';
 import { miniAllStrings } from '@strudel/mini';
+import * as strudelWebaudio from '@strudel/webaudio';
 import { webaudioOutput } from '@strudel/webaudio';
 import { initAudio, registerSynthSounds, resetGlobalEffects, samples, setAudioContext } from 'superdough';
 import { registerStrudelProcessors, STRUDEL_KERNEL_NAMES } from './register';
@@ -48,6 +51,18 @@ export interface StrudelEngine {
   clock: AudioClock;
   // setTimeout replacement that keeps working with the screen off.
   sleep: (ms: number) => Promise<void>;
+  // Turns pattern code (the text you'd type in the Strudel REPL) into a pattern for scheduler.setPattern().
+  evaluate: (code: string) => Promise<unknown>;
+}
+
+// Pattern code runs through @strudel/core's evaluate() (Function(), which Hermes supports). Its names (note, s, ...)
+// must be globals, like in the Strudel REPL: evalScope installs them once.
+let scopeReady: Promise<unknown> | null = null;
+async function evaluatePattern(code: string): Promise<unknown> {
+  scopeReady = scopeReady ?? evalScope(strudelCore, strudelMini, strudelWebaudio);
+  await scopeReady;
+  const { pattern } = (await strudelEvaluate(code)) as { pattern: unknown };
+  return pattern;
 }
 
 let engine: Promise<StrudelEngine> | null = null;
@@ -112,7 +127,7 @@ async function create(options: InitStrudelOptions): Promise<StrudelEngine> {
       }, Math.min(50, ms));
     });
 
-  return { scheduler, context, clock, sleep };
+  return { scheduler, context, clock, sleep, evaluate: evaluatePattern };
 }
 
 // strudel.cc's default sample set (the manifests its own init loads, in the same order; order matters where two define

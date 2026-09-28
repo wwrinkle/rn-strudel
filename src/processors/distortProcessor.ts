@@ -1,18 +1,10 @@
-// Real-time port of superdough's DistortProcessor (worklets.mjs), including
-// its 9 waveshaping algorithms (helpers.mjs's distortionAlgorithms: scurve,
-// soft, hard, cubic, diode, asym, fold, sinefold, chebyshev). Registered in
-// webAudioShim.ts as 'distort-processor'.
+// Real-time port of superdough's DistortProcessor (worklets.mjs), including its 9 waveshaping algorithms
+// (helpers.mjs's distortionAlgorithms: scurve, soft, hard, cubic, diode, asym, fold, sinefold, chebyshev). Superdough
+// source: https://codeberg.org/uzu/strudel (AGPL-3.0-or-later). Registered (register.ts) as 'distort-processor'.
 //
-// The original selects an algorithm FUNCTION at construction time
-// (`this.algorithm = getDistortionAlgorithm(processorOptions.algorithm)`)
-// and calls it per-sample. Storing a function reference in state and
-// calling it from `process` would reintroduce exactly the "closure over a
-// value that isn't itself self-contained" risk documented in
-// webAudioShim.ts's header — so instead, the algorithm is resolved to a
-// plain number index once (JS thread, at construction), and `process`
-// switches on that index with every algorithm's math inlined as nested
-// functions in its own body (self-contained, matches crush/ladder's
-// confirmed-working shape).
+// The original picks an algorithm function at construction and calls it per sample. A function stored in state can't
+// be called from a worklet (rn-web-audio-compat's docs/FINDINGS.md, "Worklet rules"), so the algorithm is resolved to an index once, on the JS thread, and
+// `process` switches on it, with every algorithm inlined.
 
 import type { WorkletProcessorModule } from 'rn-web-audio-compat';
 

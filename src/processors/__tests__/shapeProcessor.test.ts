@@ -33,7 +33,7 @@ describe('shapeProcessor parity with superdough ShapeProcessor', () => {
     { shape: 0.5, postgain: 0.8 },
     { shape: 0.95, postgain: 0.5 },
   ])('matches upstream at %o', ({ shape, postgain }) => {
-    // A real Web Audio AudioParam is float32; ours is a float64 SharedValue
+    // A real Web Audio AudioParam is float32; ours is a float64 JS number
     // — quantize test inputs through Math.fround for both sides so the
     // comparison isolates the DSP math, not that separate, already-
     // documented precision gap (see ladderProcessor.test.ts).

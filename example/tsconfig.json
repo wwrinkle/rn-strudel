@@ -1,0 +1,18 @@
+{
+  "extends": "expo/tsconfig.base",
+  "compilerOptions": {
+    "strict": true,
+    "paths": {
+      "react-native-audio-api": ["./node_modules/react-native-audio-api"],
+      "react-native-worklets": ["./node_modules/react-native-worklets"],
+      "react-native": ["./node_modules/react-native"],
+      "rn-strudel": ["../src/index.ts"],
+      "rn-strudel/*": ["../src/*"],
+      "rn-web-audio-compat": ["../../rn-web-audio-compat/src/index.ts"],
+      "rn-web-audio-compat/*": ["../../rn-web-audio-compat/src/*"],
+      "superdough": ["./node_modules/superdough"]
+    }
+  },
+  "include": ["**/*.ts", "**/*.tsx", "../src/**/*.ts", "../conformance/**/*.ts"],
+  "exclude": ["node_modules", "../src/**/__tests__"]
+}

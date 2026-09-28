@@ -1,4 +1,4 @@
-// Cached reverb impulse responses for .room() (optimizations.ts 'reverbIrCache').
+// Cached reverb impulse responses for .room() (option `reverbIrCache`).
 //
 // superdough regenerates the noise IR every time an orbit's reverb is created (every pattern start, since
 // resetGlobalEffects() drops the orbits) and every time a pattern changes .roomsize/.roomfade/.roomlp/.roomdim: about
@@ -101,7 +101,7 @@ function applyGradualLowpass(
     callback(input);
     return;
   }
-  // The global OfflineAudioContext (rnGlobalPolyfills.ts), same as superdough uses.
+  // The global OfflineAudioContext (rn-web-audio-compat's globals), same as superdough uses.
   const Offline = (
     globalThis as unknown as {
       OfflineAudioContext: new (channels: number, length: number, sampleRate: number) => BaseAudioContext & {

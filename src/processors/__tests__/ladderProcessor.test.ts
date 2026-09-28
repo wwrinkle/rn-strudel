@@ -44,7 +44,7 @@ describe('ladderProcessor parity with superdough LadderProcessor', () => {
   ])('matches upstream across consecutive blocks: %o', ({ frequency, q, drive }) => {
     // A real Web Audio AudioParam is always float32, so parameters.q[0] etc.
     // arrive float32-quantized in the real processor. Our shim's params come
-    // from a Reanimated SharedValue (float64) — quantize test inputs through
+    // from a float64 JS number — quantize test inputs through
     // Math.fround for both sides so the comparison isolates the DSP math
     // itself, not that separate (tiny, already-documented) precision gap.
     const freq32 = Math.fround(frequency);

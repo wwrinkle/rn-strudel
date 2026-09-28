@@ -1,35 +1,12 @@
-// Real-time port of superdough's LadderProcessor (worklets.mjs), a
-// Moog-style ladder filter. Superdough source: https://codeberg.org/uzu/strudel
-// (AGPL-3.0-or-later), packages/superdough/worklets.mjs, class
-// LadderProcessor. Registered in
-// webAudioShim.ts under the same processor name superdough uses:
-// 'ladder-processor'.
+// Real-time port of superdough's LadderProcessor (worklets.mjs), a Moog-style ladder filter. Superdough source:
+// https://codeberg.org/uzu/strudel (AGPL-3.0-or-later), packages/superdough/worklets.mjs, class LadderProcessor.
+// Registered (register.ts) under superdough's name, 'ladder-processor'.
 //
-// State (the four filter stages, per channel) is created once per
-// constructed node via createState() — matches the original's constructor()
-// semantics: superdough gets a brand new AudioWorkletNode per hap, so filter
-// state never leaks between notes. Channel count isn't known until the
-// first process call, so the array grows lazily to match.
+// State (four filter stages per channel) is created per node by createState(), like the original's constructor:
+// superdough makes a new node per note, so filter state never leaks between notes. The channel array grows on first use.
 //
-// `process` is fully self-contained: every helper (fastTanh, the stage
-// shape) is declared INSIDE the function body, not as a module-level const
-// referenced from it. Two device-crash iterations got here:
-//   1. An early version returned `process` from a factory closing over its
-//      own mutable `channels` state — crashed on-device (uncaught exception
-//      on WorkletProcessingNode's real-time call path -> std::terminate,
-//      see webAudioShim.ts and CLAUDE.md). Fixed by threading state through
-//      as an explicit argument instead (this file's current shape).
-//   2. That fix stopped the crash (try/catch in webAudioShim.ts now catches
-//      it) but the block was still silently failing every call — no sound
-//      at all. crushProcessor.ts's `process` only ever referenced Math.*
-//      globals; this file's `process` referenced TWO_PI/fastTanh/clamp/
-//      makeStage as SEPARATE module-level bindings, which the worklet
-//      babel transform (operating on this one function's own AST) has no
-//      obvious way to pull in as a "free variable" of a different function
-//      — Math.* works because it's a true global, not a module import.
-//      Inlining everything into process's own body removes that class of
-//      reference entirely, matching crush's confirmed-working shape. Not
-//      yet re-verified on-device as of this pass — see CLAUDE.md.
+// `process` is self-contained (rn-web-audio-compat's docs/FINDINGS.md, "Worklet rules"): every helper (fastTanh, the stage shape) is declared inside it. A version
+// that referenced module-level helpers was silent on a device.
 
 import type { WorkletProcessorModule } from 'rn-web-audio-compat';
 

@@ -2,12 +2,12 @@
 // — a detuned-unison sawtooth stack, source-style, always stereo (writes
 // output[0]/output[1] directly, matching the original — superdough
 // constructs this specific node with `{ outputChannelCount: [2] }`).
-// Registered in webAudioShim.ts as 'supersaw-oscillator'.
+// Registered (register.ts) as 'supersaw-oscillator'.
 //
 // superdough pools and reuses these nodes across notes (getNodeFromPool in
 // synth.mjs) and resets per-voice phase via
 // `node.port.postMessage({ type: 'initialize' })` before each reuse — the
-// one processor in this pass that genuinely needs webAudioShim.ts's .port
+// one processor in this pass that genuinely needs AudioWorkletNode's .port
 // mailbox, not just parameters. See onMessage below.
 
 import type { WorkletProcessorModule } from 'rn-web-audio-compat';

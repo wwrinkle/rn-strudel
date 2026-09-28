@@ -67,7 +67,7 @@ void transient(
   // transientProcessor.ts derives these from processorOptions ONCE, in createState() — never per block, since
   // transient has no live AudioParams at all (parameterDescriptors is []). Match that here: computing them fresh
   // every call (3 std::exp calls plus several clamps) was pure overhead the JS version never paid, and measured as
-  // real cost on-device (see CLAUDE.md's effect-cost-benchmark section). Cache in state on first call instead.
+  // real cost on a Pixel 10. Cache in state on first call instead.
   if (!s.init) {
     const double invSr = 1.0 / sr;
     auto timeToCoeff = [&](double tt) { return 1.0 - std::exp(-invSr / tt); };

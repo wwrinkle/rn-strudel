@@ -1,6 +1,6 @@
 // Real-time port of superdough's PulseOscillatorProcessor (worklets.mjs) —
 // a "half-Tomisawa" feedback-FM pulse oscillator, source-style. Registered
-// in webAudioShim.ts as 'pulse-oscillator'.
+// in register.ts as 'pulse-oscillator'.
 //
 // Ported as faithfully as possible, including one upstream quirk kept
 // intentionally rather than "fixed": `env` is a local reset to 1 at the

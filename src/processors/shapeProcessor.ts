@@ -1,6 +1,6 @@
 // Real-time port of superdough's ShapeProcessor (worklets.mjs) — a
 // waveshaping distortion (distinct algorithm/params from distortProcessor).
-// Registered in webAudioShim.ts as 'shape-processor'. GPLv3-family
+// Registered (register.ts) as 'shape-processor'. GPLv3-family
 // attribution same as crushProcessor.ts (dktr0's WebDirt) — see that file.
 //
 // Stateless — no cross-block state needed.
