@@ -106,7 +106,9 @@ Both render one row per [COVERAGE.md](COVERAGE.md) feature, from the same source
 exercises it. **Play** loops the pattern and **Test** plays it briefly and checks that sound came out. Features that
 don't work on React Native have a disabled button.
 
-- **`example/`:** Expo app. Run `cd example && npm install && npx expo run:android`.
+- **`example/`:** Expo app. It uses rn-web-audio-compat from a checkout next to this one
+  (`git clone https://github.com/wwrinkle/rn-web-audio-compat ../rn-web-audio-compat`), so you can work on both at once.
+  Run `cd example && npm install && npx expo run:android`.
   - The **CPU savings** panel has every A/B switch and a 10-second audio-load meter.
   - `EXPO_PUBLIC_AUTORUN=1` tests every row on launch and logs `[STRUDEL]` lines.
 - **`web-demo/`:** the same rows on stock Strudel in a browser, as the reference for comparing by ear and by result.
