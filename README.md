@@ -110,6 +110,9 @@ don't work on React Native have a disabled button.
   (`git clone https://github.com/wwrinkle/rn-web-audio-compat ../rn-web-audio-compat`), so you can work on both at once.
   Run `cd example && npm install && npx expo run:android`.
   - The **CPU savings** panel has every A/B switch and a 10-second audio-load meter.
+  - The **Benchmarks** panel ([example/benchmarks.ts](example/benchmarks.ts)): native vs JS output of every native
+    effect, C++ kernel cost, and JS processor cost on the JS and audio threads. `EXPO_PUBLIC_AUTORUN=bench` runs them
+    all on launch.
   - `EXPO_PUBLIC_AUTORUN=1` tests every row on launch and logs `[STRUDEL]` lines.
 - **`web-demo/`:** the same rows on stock Strudel in a browser, as the reference for comparing by ear and by result.
   Run `cd web-demo && npm install && npm run dev`; `#run` tests everything.

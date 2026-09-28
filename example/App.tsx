@@ -12,8 +12,18 @@ import { measureAudioLoad, setNativeProcessorsEnabled, areNativeProcessorsEnable
 import { GROUPS, ROWS } from '../conformance/rows';
 import { runStrudelRow, summarizeStrudel } from '../conformance/runner';
 import type { StrudelResult, StrudelRow, StrudelTestEnv } from '../conformance/types';
+import { runAudioRuntimeBenchmark, runEffectBenchmark, runNativeCheck, runNativeKernelBenchmark } from './benchmarks';
 
+// EXPO_PUBLIC_AUTORUN=1 tests every row on launch; =bench runs every benchmark on launch.
 const AUTORUN = process.env.EXPO_PUBLIC_AUTORUN === '1';
+const AUTOBENCH = process.env.EXPO_PUBLIC_AUTORUN === 'bench';
+
+const BENCHMARKS: [string, (onLine: (line: string) => void) => Promise<unknown>][] = [
+  ['Native vs JS check', runNativeCheck],
+  ['C++ kernel cost', runNativeKernelBenchmark],
+  ['JS processor cost (JS thread)', runEffectBenchmark],
+  ['JS processor cost (audio thread)', runAudioRuntimeBenchmark],
+];
 
 // Stripped-down inline markdown for the cards: `code` stays, [text](link) keeps the text.
 const plain = (md: string) => md.replace(/\[([^\]]+)\]\([^)]+\)/g, '$1').replace(/`/g, '');
@@ -47,6 +57,7 @@ export default function App() {
     nativeClock: true,
   });
   const [load, setLoad] = useState<string>('');
+  const [benchLines, setBenchLines] = useState<string[]>([]);
   const audibleRef = useRef(audible);
   audibleRef.current = audible;
   const env = useMemo(() => makeEnv(() => audibleRef.current), []);
@@ -141,6 +152,28 @@ export default function App() {
     setLoad(text);
   }, [playing, switches]);
 
+  const bench = useCallback(
+    async (run: (onLine: (line: string) => void) => Promise<unknown>) => {
+      await stopPlaying();
+      setRunning('bench');
+      setBenchLines([]);
+      await run((line) => setBenchLines((prev) => [...prev, line]));
+      setRunning(null);
+    },
+    [stopPlaying]
+  );
+
+  const autobenched = useRef(false);
+  useEffect(() => {
+    if (!AUTOBENCH || autobenched.current) return;
+    const id = setTimeout(async () => {
+      autobenched.current = true;
+      for (const [, run] of BENCHMARKS) await bench(run);
+      console.log('[BENCH] all done');
+    }, 2000);
+    return () => clearTimeout(id);
+  }, [bench]);
+
   const sections = useMemo(() => GROUPS.map((g) => ({ title: g, data: ROWS.filter((r) => r.group === g) })), []);
 
   const header = (
@@ -167,6 +200,16 @@ export default function App() {
         </Pressable>
       </View>
       {load ? <Text style={[styles.how, { color: c.fg }]}>{load}</Text> : null}
+      <Text style={[styles.section, { color: c.fg }]}>Benchmarks</Text>
+      <Text style={[styles.how, { color: c.muted }]}>Developer measurements; they block audio for a few seconds each.</Text>
+      <View style={styles.benchButtons}>
+        {BENCHMARKS.map(([label, run]) => (
+          <Pressable key={label} style={[styles.button, { borderColor: c.muted }]} disabled={busy} onPress={() => void bench(run)}>
+            <Text style={{ color: c.fg }}>{label}</Text>
+          </Pressable>
+        ))}
+      </View>
+      {benchLines.length ? <Text style={[styles.code, { color: c.fg }]}>{benchLines.join('\n')}</Text> : null}
     </View>
   );
 
@@ -248,6 +291,7 @@ const styles = StyleSheet.create({
   title: { fontSize: 22, fontWeight: '700' },
   list: { paddingHorizontal: 16, paddingBottom: 32 },
   panel: { borderRadius: 8, padding: 10, gap: 6, marginTop: 8 },
+  benchButtons: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
   switchRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', gap: 8 },
   section: { fontSize: 17, fontWeight: '700', marginTop: 18, marginBottom: 6 },
   card: { borderRadius: 8, padding: 10, marginVertical: 4, gap: 4 },

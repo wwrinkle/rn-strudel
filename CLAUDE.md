@@ -21,3 +21,6 @@ before touching anything that runs on the audio thread.
 - **iOS:** run the `iOS example build` workflow (free: public repo), sideload the .ipa, read `[STRUDEL]` lines from the
   device log (`pymobiledevice3 syslog live`, started before opening the app). A free Apple ID allows 3 sideloaded apps;
   profiles of uninstalled apps still count (`pymobiledevice3 provision list` / `remove`).
+- **After porting or changing a processor:** `npm test` and `npm run parity` (desktop), then the example's Benchmarks
+  panel on a device (`EXPO_PUBLIC_AUTORUN=bench`): "Native vs JS check" must stay all-match, and the kernel cost shows
+  what the port bought.
