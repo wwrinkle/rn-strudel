@@ -25,9 +25,9 @@ Coverage (**79%** of superdough's features): [COVERAGE.md](COVERAGE.md). What we
 
 ## Status
 
-- **Android:** verified on a Pixel 10 and the emulator.
-- **iOS:** the integration was developed on an iPhone. The current version, with the C++ kernels and the audio clock, has
-  **not been compiled for iOS** yet.
+- **Android:** 26/26 on a Pixel 10, the same as in Chrome.
+- **iOS:** 26/26 on an iPhone 13 (iOS 26.5), built by this repo's `iOS example build` workflow. Playing with the
+  screen locked hasn't been re-checked on iOS with this version (it worked with an earlier one).
 - **Distribution:** not on npm. Install from GitHub.
 - **Pinned versions:** `@strudel/core` / `@strudel/mini` 1.2.6, `@strudel/webaudio` / `superdough` 1.3.0, and
   react-native-audio-api 0.13.5 (the native patch is version-specific).

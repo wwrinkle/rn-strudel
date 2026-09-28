@@ -18,3 +18,6 @@ before touching anything that runs on the audio thread.
   Keep the phone unlocked (`adb shell svc power stayon usb`).
 - **Pinned upstream versions** (@strudel/* 1.2.6 / 1.3.0): superdough internals are patched by name
   (`createFeedbackDelay`, `createReverb`, the crackle sound); re-check them when upgrading.
+- **iOS:** run the `iOS example build` workflow (free: public repo), sideload the .ipa, read `[STRUDEL]` lines from the
+  device log (`pymobiledevice3 syslog live`, started before opening the app). A free Apple ID allows 3 sideloaded apps;
+  profiles of uninstalled apps still count (`pymobiledevice3 provision list` / `remove`).
