@@ -1,7 +1,8 @@
 // rn-strudel's web reference: the example app's feature rows, played by stock Strudel in the browser (through
 // rn-strudel's web entry, the same initStrudel() API). "Play" loops a row's pattern; "Test" plays it briefly and checks
 // that sound came out, exactly as the app does.
-import { initStrudel, loadDefaultSamples } from 'rn-strudel';
+import { bundledSamples, initStrudel, loadDefaultSamples } from 'rn-strudel';
+import { BUNDLED_SAMPLES } from '../../conformance/bundled';
 import { GROUPS, ROWS } from '../../conformance/rows';
 import { runStrudelRow, summarizeStrudel } from '../../conformance/runner';
 import type { StrudelResult, StrudelRow, StrudelTestEnv } from '../../conformance/types';
@@ -10,6 +11,7 @@ const env: StrudelTestEnv = {
   platform: 'web',
   engine: () => initStrudel(),
   loadSamples: loadDefaultSamples,
+  loadBundled: () => bundledSamples(BUNDLED_SAMPLES),
   audible: true,
   playMs: 3000,
 };
@@ -49,6 +51,7 @@ async function play(row: StrudelRow, button: HTMLButtonElement): Promise<void> {
   const engine = await initStrudel();
   try {
     if (row.needsSamples) await loadDefaultSamples();
+    if (row.needsBundled) await bundledSamples(BUNDLED_SAMPLES);
     engine.scheduler.setPattern(await engine.evaluate(row.code!));
     engine.scheduler.start();
     playing = { id: row.id, button };

@@ -18,16 +18,18 @@ the Strudel-specific parts:
 - **Working delay and reverb.**
 - **Screen-lock-safe scheduling:** the scheduler is driven by an audio-thread clock.
 - **Import-time fixes:** the browser stubs Strudel's packages touch while loading.
-- **Samples:** strudel.cc's default sample banks.
+- **Samples:** strudel.cc's default sample banks, and clips bundled inside the app (`bundledSamples()`), which load
+  without a network in release builds too.
 
-Coverage (**79%** of superdough's features): [COVERAGE.md](COVERAGE.md). What we found getting here:
+Coverage (**80%** of superdough's features): [COVERAGE.md](COVERAGE.md). What we found getting here:
 [docs/FINDINGS.md](docs/FINDINGS.md).
 
 ## Status
 
-- **Android:** 26/26 on a Pixel 10, the same as in Chrome.
+- **Android:** 26/26 on a Pixel 10, the same as in Chrome. The newer Bundled samples row: 27/27 on the emulator, in a
+  release build.
 - **iOS:** 26/26 on an iPhone 13 (iOS 26.5), built by this repo's `iOS example build` workflow, including rows that
-  ran with the screen locked.
+  ran with the screen locked. The Bundled samples row is not yet checked on iOS.
 - **Distribution:** not on npm. Install from GitHub.
 - **Pinned versions:** `@strudel/core` / `@strudel/mini` 1.2.6, `@strudel/webaudio` / `superdough` 1.3.0, and
   react-native-audio-api 0.13.5 (the native patch is version-specific).
@@ -80,6 +82,21 @@ engine.scheduler.start();
 engine.scheduler.stop();
 ```
 
+**Clips shipped with the app:** `bundledSamples()` registers them by name, for `s("name")` or `s("name:1")`:
+
+```ts
+import { bundledSamples } from 'rn-strudel';
+
+await bundledSamples({ // after initStrudel()
+  hello: require('./assets/hello.wav'),
+  count: [require('./assets/one.wav'), require('./assets/two.wav')], // count:0, count:1
+});
+```
+
+Each clip is decoded when you call it, so the first hit plays (superdough drops a sample whose loading outlasts the
+scheduler's lookahead). It works in release builds, where `samples()` can't load a bundled file on Android
+([docs/FINDINGS.md](docs/FINDINGS.md)). Register a name once: a clip already loaded under a name stays cached.
+
 You can also build patterns with the functions from `@strudel/core` / `@strudel/mini` (`note`, `s`, ...) and pass them
 to `setPattern` directly.
 
@@ -97,7 +114,7 @@ default, and each was A/B tested on a Pixel. `setNativeProcessorsEnabled(false)`
 ports instead of the native effects.
 
 **The same code on the web:** in a browser, `rn-strudel` resolves to a thin wrapper over stock Strudel, with the same
-`initStrudel()` / `evaluate` / `loadDefaultSamples()` API, so app code shared between web and native needs no platform
+`initStrudel()` / `evaluate` / `loadDefaultSamples()` / `bundledSamples()` API, so app code shared between web and native needs no platform
 checks.
 
 ## Demos
@@ -118,7 +135,8 @@ don't work on React Native have a disabled button.
   Run `cd web-demo && npm install && npm run dev`; `#run` tests everything.
 
 Tests:
-- `npm test`: parity tests of the TS ports against superdough's own processors.
+- `npm test`: parity tests of the TS ports against superdough's own processors, and `bundledSamples()` against
+  superdough's sampler.
 - `npm run parity`: the C++ kernels against the TS ports, sample by sample.
 - `npm run coverage`: regenerates COVERAGE.md.
 

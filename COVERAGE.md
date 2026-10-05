@@ -10,6 +10,7 @@ What of Strudel/superdough works on React Native with rn-strudel, how, and where
 |---|---|---|---|---|---|
 | Basic waveforms (`s("sawtooth")` etc.) | Yes | superdough's own code on react-native-audio-api's built-in nodes (through rn-web-audio-compat) | — | — | `note("c3 eb3 g3 c4").s("<sawtooth square triangle sine>")` |
 | Samples (`s("bd sd")`) | Yes | superdough's sampler: fetch + decodeAudioData + AudioBufferSourceNode, all native. Loads strudel.cc's default sample manifests (`loadDefaultSamples()`) | [setup.ts](src/setup.ts) (`loadDefaultSamples`) | — | `s("bd sd [~ bd] sd")` |
+| Bundled samples (`bundledSamples({ name: require(...) })`) | Yes | Clips shipped inside the app, no network. Decoded up front by react-native-audio-api (which reads bundled assets in release builds, where `fetch` can't on Android) and handed to superdough's sampler under private `rn-asset:` URLs | [bundledSamples.ts](src/bundledSamples.ts) | — | `s("bundled-click*4")` |
 | Noise (`s("white")`, `pink`, `brown`) | Yes | superdough's own code on react-native-audio-api's built-in nodes (through rn-web-audio-compat) | — | — | `s("<white pink brown>*2").gain(0.4)` |
 | Crackle (`s("crackle")`) | Yes | superdough's voice, with the noise from a small pool of buffers instead of a new 2 s buffer per note (option `crackleCache`) | [crackle.ts](src/superdough/crackle.ts) | Done: 1.4-3.5 ms of JS per note instead of 19 ms (Pixel 10) | `s("crackle*8").density("<0.05 0.2>")` |
 | Pulse oscillator (`s("pulse")`, `pulse-oscillator`) | Yes | C++ kernel (JS worklet fallback) | [StrudelKernels.cpp](native/rnaa-0.13.5/files/common/cpp/audioapi/dsp/rnwac_ext/StrudelKernels.cpp), [pulseOscillatorProcessor.ts](src/processors/pulseOscillatorProcessor.ts) | — | `note("c3 eb3 g3 c4").s("pulse")` |
@@ -67,7 +68,7 @@ What of Strudel/superdough works on React Native with rn-strudel, how, and where
 
 ## Coverage
 
-31 features: 23 yes, 3 partial, 5 no: **79%** (partial counts as half; 84% present at all).
+32 features: 24 yes, 3 partial, 5 no: **80%** (partial counts as half; 84% present at all).
 
 ## Beyond the patterns
 

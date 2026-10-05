@@ -5,5 +5,5 @@ module.exports = {
   testMatch: ['**/__tests__/**/*.test.ts'],
   setupFiles: ['<rootDir>/jest.setup.js'],
   transform: { '\\.(mjs|[jt]s)$': 'babel-jest' },
-  transformIgnorePatterns: ['/node_modules/(?!(superdough|rn-web-audio-compat|@kabelsalat)/)'],
+  transformIgnorePatterns: ['/node_modules/(?!(superdough|rn-web-audio-compat|@kabelsalat|nanostores)/)'],
 };

@@ -49,6 +49,7 @@ export async function runStrudelRow(row: StrudelRow, env: StrudelTestEnv): Promi
   let t: ReturnType<typeof tap> | null = null;
   try {
     if (row.needsSamples) await env.loadSamples();
+    if (row.needsBundled) await env.loadBundled();
     const pattern = await engine.evaluate(row.code);
     engine.scheduler.setPattern(pattern);
     engine.scheduler.start(); // resets orbit effects, so tap afterwards

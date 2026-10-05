@@ -7,8 +7,9 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Pressable, SectionList, StyleSheet, Switch, Text, View, useColorScheme } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
-import { initStrudel, loadDefaultSamples, getStrudelOptions, setStrudelOptions, type StrudelEngine, type StrudelOptions } from 'rn-strudel';
+import { bundledSamples, initStrudel, loadDefaultSamples, getStrudelOptions, setStrudelOptions, type StrudelEngine, type StrudelOptions } from 'rn-strudel';
 import { measureAudioLoad, setNativeProcessorsEnabled, areNativeProcessorsEnabled } from 'rn-web-audio-compat';
+import { BUNDLED_SAMPLES } from '../conformance/bundled';
 import { GROUPS, ROWS } from '../conformance/rows';
 import { runStrudelRow, summarizeStrudel } from '../conformance/runner';
 import type { StrudelResult, StrudelRow, StrudelTestEnv } from '../conformance/types';
@@ -33,6 +34,7 @@ function makeEnv(audible: () => boolean): StrudelTestEnv {
     platform: 'native',
     engine: () => initStrudel(),
     loadSamples: loadDefaultSamples,
+    loadBundled: () => bundledSamples(BUNDLED_SAMPLES),
     get audible() {
       return audible();
     },
@@ -84,6 +86,7 @@ export default function App() {
       }
       try {
         if (row.needsSamples) await loadDefaultSamples();
+        if (row.needsBundled) await bundledSamples(BUNDLED_SAMPLES);
         engine.scheduler.setPattern(await engine.evaluate(row.code!));
         engine.scheduler.start();
         setPlaying(row.id);

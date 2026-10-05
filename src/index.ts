@@ -10,6 +10,8 @@
 import './environment';
 
 export { initStrudel, loadDefaultSamples, DEFAULT_SAMPLE_MANIFESTS } from './setup';
+export { bundledSamples } from './bundledSamples';
+export type { BundledSample } from './bundledSamples';
 export type { InitStrudelOptions, StrudelEngine, StrudelScheduler } from './setup';
 export { getStrudelOption, getStrudelOptions, setStrudelOptions } from './options';
 export type { StrudelOptions } from './options';

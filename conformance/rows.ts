@@ -36,6 +36,15 @@ export const ROWS: StrudelRow[] = [
   }),
   row({
     group: 'Sounds',
+    name: 'Bundled samples (`bundledSamples({ name: require(...) })`)',
+    covered: 'yes',
+    how: 'Clips shipped inside the app, no network. Decoded up front by react-native-audio-api (which reads bundled assets in release builds, where `fetch` can\'t on Android) and handed to superdough\'s sampler under private `rn-asset:` URLs',
+    source: '[bundledSamples.ts](src/bundledSamples.ts)',
+    code: 's("bundled-click*4")',
+    needsBundled: true,
+  }),
+  row({
+    group: 'Sounds',
     name: 'Noise (`s("white")`, `pink`, `brown`)',
     covered: 'yes',
     how: NATIVE_NODES,

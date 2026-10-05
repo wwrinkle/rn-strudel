@@ -44,6 +44,13 @@ driven through `window.postMessage`); normal patterns never touch it. Not suppor
 - **Default samples:** strudel.cc loads six manifests from `felixroos/dough-samples`, in order;
   `loadDefaultSamples()` does the same, sequentially (order matters where two define the same name). Plain `bd` / `sd`
   come from EmuSP12 in that set. Note that `sn` and `sd` are different sounds.
+- **Bundled clips can't go through `samples()` in an Android release build.** superdough loads every sample with
+  `fetch(url)` and then `decodeAudioData(bytes)`. A bundled asset's URL is Metro's `http://` URL in a dev build and a
+  `file://` path in an iOS release, both of which `fetch` reads, but in an Android release it is a raw resource name
+  inside the APK (`res/ky.wav`), and Android's `fetch` (OkHttp) only speaks http and https. react-native-audio-api's
+  `decodeAudioData(require(...))` reads all three, so `bundledSamples()` decodes with it and answers superdough's
+  `fetch` and `decodeAudioData` for its own `rn-asset:` URLs with the decoded buffers. Checked in an Android release
+  build on the emulator (the "Bundled samples" row).
 
 ## Scheduling
 

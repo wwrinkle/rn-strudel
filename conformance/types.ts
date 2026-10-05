@@ -13,6 +13,7 @@ export interface StrudelRow {
   source?: string; // markdown links, relative to the repo root
   code?: string; // pattern code; absent = not implemented on React Native (the button is disabled)
   needsSamples?: boolean; // loads strudel.cc's default sample manifests first (network)
+  needsBundled?: boolean; // registers the clips bundled with the demo first (bundled.ts)
   savings?: string;
 }
 
@@ -27,6 +28,7 @@ export interface StrudelTestEnv {
   platform: 'native' | 'web';
   engine(): Promise<StrudelEngineLike>;
   loadSamples(): Promise<void>;
+  loadBundled(): Promise<void>;
   audible: boolean;
   playMs: number;
 }

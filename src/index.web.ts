@@ -82,5 +82,8 @@ export function loadDefaultSamples(): Promise<void> {
   return defaultSamples;
 }
 
+export { bundledSamples } from './bundledSamples.web';
+export type { BundledSample } from './bundledSamples.web';
+
 // No-op option API on web (nothing to switch there), so shared code can call it unconditionally.
 export function setStrudelOptions(_: Record<string, boolean>): void {}
