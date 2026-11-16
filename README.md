@@ -98,14 +98,17 @@ scheduler's lookahead). It works in release builds, where `samples()` can't load
 ([docs/FINDINGS.md](docs/FINDINGS.md)). Register a name once: a clip already loaded under a name stays cached.
 
 You can also build patterns with the functions from `@strudel/core` / `@strudel/mini` / `@strudel/tonal` (`note`, `s`,
-`.scale()`, ...) and pass them to `setPattern` directly. `initStrudel()` loads all three, and `evaluate` sees their
-names, as in the Strudel REPL.
+`.scale()`, ...) and pass them to `setPattern` directly. `initStrudel()` loads all three and makes plain strings parse
+as mini-notation, and `evaluate` sees their names, as in the Strudel REPL.
+
+**Patterns built before `initStrudel()`** (a module that builds them as it loads, or plain Node tests): import
+`rn-strudel/language` first. It does the same setup on its own: tonal's methods exist, and `s('brown*16')` is sixteen
+events instead of one sound named "brown*16". A pattern takes its strings as it's built, so this has to come first.
 
 **TypeScript:** Strudel ships no declarations, so rn-strudel does: `src/strudel.d.ts`, generated from the pinned
 packages (`npm run gen-types`). It lists every export and every `Pattern` method, so a misspelled method or one from a
 package that isn't loaded is a type error; arguments are loose (`any`). It comes with any import of `rn-strudel` or
-`rn-strudel/language`. A module that builds patterns as it loads (before `initStrudel()` runs, or in plain Node tests)
-should import `rn-strudel/language` first, so tonal's methods exist by then:
+`rn-strudel/language`:
 
 ```ts
 import 'rn-strudel/language';
