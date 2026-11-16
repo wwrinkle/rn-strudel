@@ -97,8 +97,22 @@ Each clip is decoded when you call it, so the first hit plays (superdough drops 
 scheduler's lookahead). It works in release builds, where `samples()` can't load a bundled file on Android
 ([docs/FINDINGS.md](docs/FINDINGS.md)). Register a name once: a clip already loaded under a name stays cached.
 
-You can also build patterns with the functions from `@strudel/core` / `@strudel/mini` (`note`, `s`, ...) and pass them
-to `setPattern` directly.
+You can also build patterns with the functions from `@strudel/core` / `@strudel/mini` / `@strudel/tonal` (`note`, `s`,
+`.scale()`, ...) and pass them to `setPattern` directly. `initStrudel()` loads all three, and `evaluate` sees their
+names, as in the Strudel REPL.
+
+**TypeScript:** Strudel ships no declarations, so rn-strudel does: `src/strudel.d.ts`, generated from the pinned
+packages (`npm run gen-types`). It lists every export and every `Pattern` method, so a misspelled method or one from a
+package that isn't loaded is a type error; arguments are loose (`any`). It comes with any import of `rn-strudel` or
+`rn-strudel/language`. A module that builds patterns as it loads (before `initStrudel()` runs, or in plain Node tests)
+should import `rn-strudel/language` first, so tonal's methods exist by then:
+
+```ts
+import 'rn-strudel/language';
+import { n, type Pattern } from '@strudel/core';
+
+const bells: Pattern = n('0 2 4').scale('e1:major:pentatonic');
+```
 
 `initStrudel(options)`:
 

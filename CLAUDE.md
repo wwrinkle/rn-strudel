@@ -13,6 +13,9 @@ before touching anything that runs on the audio thread.
   touches. `scripts/apply-native.js` copies them after applying the compat patch.
 - **Single source of truth:** `conformance/rows.ts` feeds COVERAGE.md (`npm run coverage`), the example app and the web
   demo.
+- **Strudel's types:** `src/strudel.d.ts` is generated (`npm run gen-types`, scripts/gen-strudel-types.ts) from the
+  packages `src/language.ts` loads. Rerun it after upgrading @strudel/* or loading another package that adds Pattern
+  methods; don't edit it by hand.
 - **Device runs:** `rm -rf example/android/app/build/generated/assets/react` before `./gradlew :app:assembleRelease`
   (stale bundle otherwise). `EXPO_PUBLIC_AUTORUN=1` tests every row on launch; read `[STRUDEL]` lines from logcat.
   Keep the phone unlocked (`adb shell svc power stayon usb`).

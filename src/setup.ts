@@ -15,10 +15,12 @@ import {
   stopBackgroundPlayback,
   type AudioClock,
 } from 'rn-web-audio-compat';
+import './language';
 import * as strudelCore from '@strudel/core';
 import { evalScope, evaluate as strudelEvaluate, repl } from '@strudel/core';
 import * as strudelMini from '@strudel/mini';
 import { miniAllStrings } from '@strudel/mini';
+import * as strudelTonal from '@strudel/tonal';
 import * as strudelWebaudio from '@strudel/webaudio';
 import { webaudioOutput } from '@strudel/webaudio';
 import { initAudio, registerSynthSounds, resetGlobalEffects, samples, setAudioContext } from 'superdough';
@@ -59,7 +61,7 @@ export interface StrudelEngine {
 // must be globals, like in the Strudel REPL: evalScope installs them once.
 let scopeReady: Promise<unknown> | null = null;
 async function evaluatePattern(code: string): Promise<unknown> {
-  scopeReady = scopeReady ?? evalScope(strudelCore, strudelMini, strudelWebaudio);
+  scopeReady = scopeReady ?? evalScope(strudelCore, strudelMini, strudelTonal, strudelWebaudio);
   await scopeReady;
   const { pattern } = (await strudelEvaluate(code)) as { pattern: unknown };
   return pattern;

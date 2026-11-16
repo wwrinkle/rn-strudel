@@ -3,10 +3,12 @@
 // API on top of stock @strudel/webaudio + superdough (call it from a user gesture, e.g. a click handler). It lets app
 // code shared between web and native stay free of platform checks.
 
+import './language';
 import * as strudelCore from '@strudel/core';
 import { evalScope, evaluate as strudelEvaluate, repl } from '@strudel/core';
 import * as strudelMini from '@strudel/mini';
 import { miniAllStrings } from '@strudel/mini';
+import * as strudelTonal from '@strudel/tonal';
 import * as strudelWebaudio from '@strudel/webaudio';
 import { webaudioOutput } from '@strudel/webaudio';
 import { getAudioContext, initAudio, registerSynthSounds, resetGlobalEffects, samples } from 'superdough';
@@ -32,7 +34,7 @@ export interface StrudelEngine {
 // must be globals, like in the Strudel REPL: evalScope installs them once.
 let scopeReady: Promise<unknown> | null = null;
 async function evaluatePattern(code: string): Promise<unknown> {
-  scopeReady = scopeReady ?? evalScope(strudelCore, strudelMini, strudelWebaudio);
+  scopeReady = scopeReady ?? evalScope(strudelCore, strudelMini, strudelTonal, strudelWebaudio);
   await scopeReady;
   const { pattern } = (await strudelEvaluate(code)) as { pattern: unknown };
   return pattern;
