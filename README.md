@@ -93,6 +93,15 @@ await bundledSamples({ // after initStrudel()
 });
 ```
 
+A pitched instrument recorded at a few notes maps notes to clips, as `samples()` does. Each note plays the clip
+recorded nearest it, repitched:
+
+```ts
+await bundledSamples({
+  organ: { c3: require('./assets/organ-c3.wav'), g3: require('./assets/organ-g3.wav') },
+}); // note("c3 e3 a3").s("organ")
+```
+
 Each clip is decoded when you call it, so the first hit plays (superdough drops a sample whose loading outlasts the
 scheduler's lookahead). It works in release builds, where `samples()` can't load a bundled file on Android
 ([docs/FINDINGS.md](docs/FINDINGS.md)). Register a name once: a clip already loaded under a name stays cached.

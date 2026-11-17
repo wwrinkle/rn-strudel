@@ -24,6 +24,14 @@ test('a bundled clip loads through superdough as its decoded buffer', async () =
   expect(realFetch).not.toHaveBeenCalled();
 });
 
+test('a pitched instrument registers its clips by note', async () => {
+  await bundledSamples({ organ: { c3: 21, g3: [22, 23] } });
+
+  const bank = getSound('organ').data.samples;
+  expect(bank).toEqual({ c3: ['rn-asset:organ/c3/0'], g3: ['rn-asset:organ/g3/0', 'rn-asset:organ/g3/1'] });
+  await expect(loadBuffer(bank.g3[1], context)).resolves.toEqual({ decodedFrom: 23 });
+});
+
 test('other URLs still reach the real fetch', async () => {
   await fetch('https://example.com/a.wav');
   expect(realFetch).toHaveBeenCalledWith('https://example.com/a.wav', undefined);

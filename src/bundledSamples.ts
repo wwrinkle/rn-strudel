@@ -4,6 +4,12 @@
 //   await bundledSamples({ hello: require('./assets/hello.wav'), count: [require('./one.wav'), require('./two.wav')] });
 //   s("hello count:1")
 //
+// A name can also map notes to clips, as in samples() (a pitched instrument recorded at a few notes): superdough plays
+// the clip recorded nearest each note, repitched.
+//
+//   await bundledSamples({ piano: { c3: require('./piano-c3.wav'), c4: require('./piano-c4.wav') } });
+//   note("c3 e3 g3").s("piano")
+//
 // superdough loads every sample with fetch(url) and then decodes the bytes. A release build's bundled asset has no URL
 // fetch can read on Android (it's a name inside the APK, and Android's fetch only speaks http/https), so each clip is
 // decoded here instead, with react-native-audio-api, which reads bundled assets on every platform and build. The clips
@@ -15,6 +21,10 @@ import { getAudioContext, samples } from 'superdough';
 
 // What require('./clip.wav') returns (an asset id), or a URI react-native-audio-api can decode.
 export type BundledSample = number | string;
+
+// One clip, several (name:0, name:1, ...), or clips by the note they were recorded at.
+export type BundledSamples =
+  BundledSample | readonly BundledSample[] | Readonly<Record<string, BundledSample | readonly BundledSample[]>>;
 
 const PREFIX = 'rn-asset:';
 const decoded = new Map<string, unknown>();
@@ -41,20 +51,37 @@ function install(context: any): void {
   installedOn = context;
 }
 
-export async function bundledSamples(map: Record<string, BundledSample | readonly BundledSample[]>): Promise<void> {
+const asList = (value: BundledSample | readonly BundledSample[]): readonly BundledSample[] =>
+  Array.isArray(value) ? value : [value as BundledSample];
+
+export async function bundledSamples(map: Record<string, BundledSamples>): Promise<void> {
   const context = getAudioContext();
   install(context);
-  const urls: Record<string, string[]> = {};
+  // Decodes the clips and returns their rn-asset: URLs, under `path` (name, or name/note).
+  const load = (path: string, value: BundledSample | readonly BundledSample[]) =>
+    Promise.all(
+      asList(value).map(async (source, i) => {
+        const url = `${PREFIX}${path}/${i}`;
+        decoded.set(url, await context.decodeAudioData(source));
+        return url;
+      })
+    );
+  const urls: Record<string, string[] | Record<string, string[]>> = {};
   await Promise.all(
     Object.entries(map).map(async ([name, value]) => {
-      const sources = Array.isArray(value) ? value : [value as BundledSample];
-      urls[name] = await Promise.all(
-        sources.map(async (source, i) => {
-          const url = `${PREFIX}${name}/${i}`;
-          decoded.set(url, await context.decodeAudioData(source));
-          return url;
-        })
-      );
+      if (typeof value === 'object' && !Array.isArray(value)) {
+        const byNote: Record<string, string[]> = {};
+        await Promise.all(
+          Object.entries(value as Record<string, BundledSample | readonly BundledSample[]>).map(
+            async ([note, clips]) => {
+              byNote[note] = await load(`${name}/${note}`, clips);
+            }
+          )
+        );
+        urls[name] = byNote;
+      } else {
+        urls[name] = await load(name, value as BundledSample | readonly BundledSample[]);
+      }
     })
   );
   await samples(urls);
