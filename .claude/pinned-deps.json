@@ -1,0 +1,52 @@
+{
+  "intervalDays": 3,
+  "packageJsons": ["package.json", "example/package.json"],
+  "peerSources": ["rn-web-audio-compat"],
+  "npm": [
+    {
+      "name": "superdough",
+      "why": "Patched at runtime by name: createFeedbackDelay, createReverb, the crackle sound (src/superdough/*.ts, src/setup.ts). src/processors/*.ts are ports of its worklets.mjs, parity-tested against the real classes.",
+      "alsoPinnedIn": ["package.json dependencies", "example/package.json"]
+    },
+    {
+      "name": "@strudel/core",
+      "why": "Scheduler and Pattern API; src/strudel.d.ts is generated from it (npm run gen-types).",
+      "alsoPinnedIn": ["package.json dependencies", "example/package.json"]
+    },
+    { "name": "@strudel/mini", "why": "Mini-notation; feeds src/strudel.d.ts.", "alsoPinnedIn": ["package.json", "example/package.json"] },
+    { "name": "@strudel/tonal", "why": "Scales/voicings; feeds src/strudel.d.ts.", "alsoPinnedIn": ["package.json", "example/package.json"] },
+    {
+      "name": "@strudel/webaudio",
+      "why": "Wires superdough to Strudel's output; the superdough patches go through it.",
+      "alsoPinnedIn": ["package.json", "example/package.json"]
+    },
+    {
+      "name": "@kabelsalat/web",
+      "installedOnly": true,
+      "why": "Transitive (via @strudel/core). scripts/apply-native.js fixKabelsalat() rewrites its package.json main only when main/module are exactly dist/index.js / dist/index.mjs.",
+      "alsoPinnedIn": ["scripts/apply-native.js (fixKabelsalat)"]
+    },
+    {
+      "name": "react-native-audio-api",
+      "why": "Native kernels are copied into it under native/rnaa-<version>/files (dsp/rnwac_ext), on top of rn-web-audio-compat's patch. Must match rn-web-audio-compat's SUPPORTED_RNAA.",
+      "alsoPinnedIn": [
+        "scripts/apply-native.js (native/rnaa-<version> path)",
+        "native/rnaa-<version>/ (directory name)",
+        "package.json scripts.parity (path)",
+        "src/__tests__/kernelParity.test.ts, conformance/rows.ts, COVERAGE.md, README.md (paths/docs)"
+      ]
+    },
+    {
+      "name": "react-native-worklets",
+      "why": "Processor ports run as worklets ('worklet' directive in process()).",
+      "alsoPinnedIn": ["package.json peerDependencies (>= range)", "example/package.json"]
+    }
+  ],
+  "github": [
+    {
+      "name": "rn-web-audio-compat",
+      "repo": "wwrinkle/rn-web-audio-compat",
+      "why": "devDependency used by tests and parity; its apply step is what rn-strudel's apply step builds on."
+    }
+  ]
+}

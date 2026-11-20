@@ -27,3 +27,7 @@ before touching anything that runs on the audio thread.
 - **After porting or changing a processor:** `npm test` and `npm run parity` (desktop), then the example's Benchmarks
   panel on a device (`EXPO_PUBLIC_AUTORUN=bench`): "Native vs JS check" must stay all-match, and the kernel cost shows
   what the port bought.
+- **Pinned/patched upstream versions:** a SessionStart hook (`.claude/hooks/pinned-deps-check.mjs`, config in
+  `.claude/pinned-deps.json`) checks every 3 days that they are at npm `latest` (GitHub libraries: remote HEAD) and
+  reports what is behind; `/upgrade-pinned-deps` investigates and applies upgrades, asking before each step. The
+  same setup is in Sound_Walk, rn-web-audio-compat and rn-strudel; keep the script identical across the three.
