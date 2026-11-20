@@ -36,7 +36,7 @@ const transientExtras = (o: Record<string, number>) => [
   o.end ?? 0,
 ];
 
-// Kernel ids: StrudelKernelId in native/rnaa-0.13.5/files/common/cpp/audioapi/dsp/rnwac_ext/StrudelKernels.cpp.
+// Kernel ids: StrudelKernelId in native/rnaa-0.13.6/files/common/cpp/audioapi/dsp/rnwac_ext/StrudelKernels.cpp.
 const tA = { ...ACTIVE, attack: 1, sustain: -1 };
 const tB = { ...ACTIVE, attack: 0.5, sustain: 0.3, sensitivity: 0.5, mix: 0.6, attackTime: 0.01, sustainTime: 0.2 };
 const cases: ParityCase[] = [

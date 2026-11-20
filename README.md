@@ -32,13 +32,13 @@ Coverage (**80%** of superdough's features): [COVERAGE.md](COVERAGE.md). What we
   ran with the screen locked. The Bundled samples row is not yet checked on iOS.
 - **Distribution:** not on npm. Install from GitHub.
 - **Pinned versions:** `@strudel/core` / `@strudel/mini` 1.2.6, `@strudel/webaudio` / `superdough` 1.3.0, and
-  react-native-audio-api 0.13.5 (the native patch is version-specific).
+  react-native-audio-api 0.13.6 (the native patch is version-specific).
 
 ## Install
 
 ```sh
 npm install github:wwrinkle/rn-strudel github:wwrinkle/rn-web-audio-compat \
-  react-native-audio-api@0.13.5 react-native-worklets
+  react-native-audio-api@0.13.6 react-native-worklets
 ```
 
 This needs a development build; Expo Go won't work. rn-web-audio-compat is a peer dependency.

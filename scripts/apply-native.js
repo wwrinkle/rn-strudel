@@ -50,7 +50,7 @@ function main() {
   }
   const { applyExtensionFiles } = require(compatScript);
   const i = process.argv.indexOf('--rnaa');
-  const filesDir = path.resolve(__dirname, '..', 'native', 'rnaa-0.13.5', 'files');
+  const filesDir = path.resolve(__dirname, '..', 'native', 'rnaa-0.13.6', 'files');
   const result = applyExtensionFiles('rn-strudel', filesDir, i > 0 ? process.argv[i + 1] : undefined);
   const kabelsalat = fixKabelsalat();
   if (!result) return;

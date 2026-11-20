@@ -4,7 +4,7 @@
 
 import type { StrudelRow } from './types';
 
-const KERNELS = '[StrudelKernels.cpp](native/rnaa-0.13.5/files/common/cpp/audioapi/dsp/rnwac_ext/StrudelKernels.cpp)';
+const KERNELS = '[StrudelKernels.cpp](native/rnaa-0.13.6/files/common/cpp/audioapi/dsp/rnwac_ext/StrudelKernels.cpp)';
 const SHAPERS = '[nativeShapers.ts](src/nativeShapers.ts)';
 const proc = (file: string) => `[${file}.ts](src/processors/${file}.ts)`;
 const COMPAT = 'rn-web-audio-compat';
